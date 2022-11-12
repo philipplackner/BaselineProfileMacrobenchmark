@@ -28,22 +28,35 @@ class ExampleStartupBenchmark {
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
-    fun startup() = benchmarkRule.measureRepeated(
+    fun startUpCompilationModeNone() = startup(CompilationMode.None())
+
+    @Test
+    fun startUpCompilationModePartial() = startup(CompilationMode.Partial())
+
+
+    @Test
+    fun scrollCompilationModeNone() = scrollAndNavigate(CompilationMode.None())
+
+    @Test
+    fun scrollCompilationModePartial() = scrollAndNavigate(CompilationMode.Partial())
+
+    fun startup(mode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = "com.plcoding.baselineprofilemacrobenchmark",
         metrics = listOf(StartupTimingMetric()),
         iterations = 5,
-        startupMode = StartupMode.COLD
+        startupMode = StartupMode.COLD,
+        compilationMode = mode
     ) {
         pressHome()
         startActivityAndWait()
     }
 
-    @Test
-    fun scrollAndNavigate() = benchmarkRule.measureRepeated(
+    fun scrollAndNavigate(mode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = "com.plcoding.baselineprofilemacrobenchmark",
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
-        startupMode = StartupMode.COLD
+        startupMode = StartupMode.COLD,
+        compilationMode = mode
     ) {
         pressHome()
         startActivityAndWait()
