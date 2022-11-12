@@ -15,6 +15,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
@@ -28,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.plcoding.baselineprofilemacrobenchmark.ui.theme.BaselineProfileMacrobenchmarkTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +43,16 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = navController,
                     startDestination = "start",
+                    modifier = Modifier
+                        .semantics {
+                            testTagsAsResourceId = true
+                        }
                 ) {
                     composable("start") {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .testTag("item_list")
                         ) {
                             item {
                                 Button(onClick = { counter++ }) {
